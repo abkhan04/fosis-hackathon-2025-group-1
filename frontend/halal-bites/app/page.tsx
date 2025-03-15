@@ -1,7 +1,5 @@
 import Image from "next/image";
 import { Star } from "lucide-react";
-import { useRouter } from "next/router";
-import { useState } from "react";
 
 export default function Home() {
   return (
@@ -69,16 +67,16 @@ export default function Home() {
             {/* Food Cards */}
             <div className="absolute bottom-0 right-0 flex flex-col md:flex-row gap-4 z-20 -mb-20">
               <FoodCard
-                title="Spicy noodles"
+                title="Chicken Doner"
                 rating={3}
                 price={18.0}
-                image="/placeholder.svg?height=80&width=80"
+                image="/images/chicken-doner-kebab-1.jpg"
               />
               <FoodCard
-                title="Vegetarian salad"
+                title="Lamb Biryani"
                 rating={4}
                 price={23.0}
-                image="/placeholder.svg?height=80&width=80"
+                image="/images/lamb-biryani-83e5c3d.jpg"
               />
             </div>
           </div>
