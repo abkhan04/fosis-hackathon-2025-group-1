@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Star } from "lucide-react";
 import Link from "next/link";
@@ -16,11 +16,12 @@ interface Restaurant {
   phone_number: string;
   website: string;
   opening_hours: string[];
-  navigation_url: string;
+  place_id: string;
 }
 
 export default function RestaurantsPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,11 +29,17 @@ export default function RestaurantsPage() {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const params = new URLSearchParams();
         const latitude = searchParams.get('latitude');
         const longitude = searchParams.get('longitude');
         const location = searchParams.get('location');
 
+        // If no location parameters are provided, redirect to home
+        if (!latitude && !longitude && !location) {
+          router.push('/');
+          return;
+        }
+
+        const params = new URLSearchParams();
         if (latitude && longitude) {
           params.append('latitude', latitude);
           params.append('longitude', longitude);
@@ -57,7 +64,7 @@ export default function RestaurantsPage() {
     };
 
     fetchRestaurants();
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   if (loading) {
     return (
@@ -86,7 +93,10 @@ export default function RestaurantsPage() {
             </span>
             Bites
           </Link>
-          <Link href="/map" className="bg-[#39db4a] text-white px-4 py-2 rounded-full">
+          <Link 
+            href={`/map${searchParams ? '?' + searchParams.toString() : ''}`}
+            className="bg-[#39db4a] text-white px-4 py-2 rounded-full"
+          >
             View Map
           </Link>
         </div>
@@ -99,7 +109,7 @@ export default function RestaurantsPage() {
         {/* Restaurant grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {restaurants.map((restaurant) => (
-            <div key={restaurant.name} className="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div key={restaurant.place_id} className="bg-white rounded-xl shadow-lg overflow-hidden">
               {restaurant.photo_url ? (
                 <Image
                   src={restaurant.photo_url}
@@ -149,7 +159,7 @@ export default function RestaurantsPage() {
                 {/* Action buttons */}
                 <div className="flex gap-4">
                   <a
-                    href={restaurant.navigation_url}
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(restaurant.address)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 bg-[#39db4a] text-white text-center py-2 rounded-full hover:bg-[#53ec62] transition-colors"
