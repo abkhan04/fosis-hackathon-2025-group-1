@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white overflow-hidden">
+    <main className="min-h-screen bg-white overflow-hidden px-6 md:px-12 py-6">
       <div className="container mx-auto px-4 py-6 relative">
         {/* Logo */}
         <div className="mb-16">
@@ -20,7 +20,7 @@ export default function Home() {
         {/* Hero Section */}
         <div className="flex flex-col lg:flex-row items-center">
           <div className="lg:w-1/2 z-10">
-            <h2 className="text-5xl md:text-6xl font-bold leading-tight">
+            <h2 className="text-5xl md:text-6xl font-bold leading-tight text-black">
               Dive into Delights
               <br />
               Of Delectable <span className="text-[#53ec62]">Food</span>
@@ -37,7 +37,7 @@ export default function Home() {
                 <input
                   type="text"
                   placeholder="Enter your location"
-                  className="py-4 px-6 w-full rounded-full outline-none"
+                  className="py-4 px-6 w-full rounded-full outline-none text-black"
                 />
                 <button className="bg-[#39db4a] hover:bg-[#53ec62] text-white font-medium py-3 px-8 rounded-full transition-colors">
                   Search
@@ -54,10 +54,10 @@ export default function Home() {
                 <p className="text-[#ff6868]">Us when we see haram food 🌶️</p>
               </div>
 
-              {/* Chef Image */}
+              {/* Chef Image inside Green Circle */}
               <div className="w-[500px] h-[500px] bg-[#53ec62] rounded-full overflow-hidden relative">
                 <Image
-                  src="/placeholder.svg?height=500&width=500"
+                  src="/images/male-chef.png" // Just use "/images/your-image.png"
                   alt="Chef rejecting non-halal food"
                   width={500}
                   height={500}
@@ -106,7 +106,7 @@ function FoodCard({ title, rating, price, image }: FoodCardProps) {
         className="rounded-lg object-cover"
       />
       <div>
-        <h3 className="font-medium">{title}</h3>
+        <h3 className="font-medium text-black">{title}</h3>
         <div className="flex items-center mt-1">
           {[...Array(5)].map((_, i) => (
             <Star

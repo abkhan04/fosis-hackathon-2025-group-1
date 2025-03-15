@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 import requests
 import os
 import re
-from datetime import datetime, timedelta
+from datetime import timedelta
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -28,6 +28,7 @@ jwt = JWTManager(app)
 # Google Places API endpoints
 GOOGLE_API_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 GOOGLE_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo"
+GOOGLE_PLACE_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json"
 
 
 # Define User model
@@ -46,19 +47,23 @@ class Restaurant(db.Model):
     total_ratings = db.Column(db.Integer, nullable=True)
     place_id = db.Column(db.String(255), unique=True, nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-    owner = db.relationship('User', backref=db.backref('restaurants', lazy=True))
+    owner = db.relationship(
+        'User', backref=db.backref('restaurants', lazy=True))
     phone_number = db.Column(db.String(20))
     website = db.Column(db.String(255))
     halal_certification = db.Column(db.String(255))
+
 
 # Initialize Database
 with app.app_context():
     db.create_all()
 
+
 def validate_email(email):
     """Validate email format"""
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(pattern, email) is not None
+
 
 def validate_password(password):
     """Validate password strength"""
@@ -73,6 +78,8 @@ def validate_password(password):
     return True, "Password is valid"
 
 # User Registration
+
+
 @app.route('/register', methods=['POST'])
 def register():
     try:
@@ -97,7 +104,8 @@ def register():
             return jsonify({'status': 'error', 'message': 'Email already registered'}), 400
 
         # Create new user
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(
+            password).decode('utf-8')
         new_user = User(
             email=email,
             password=hashed_password,
@@ -128,6 +136,8 @@ def register():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # User Login
+
+
 @app.route('/login', methods=['POST'])
 def login():
     try:
@@ -161,6 +171,8 @@ def login():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # Get User Profile
+
+
 @app.route('/profile', methods=['GET'])
 @jwt_required()
 def get_profile():
@@ -196,22 +208,24 @@ def get_profile():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # Update User Profile
+
+
 @app.route('/profile', methods=['PUT'])
 @jwt_required()
 def update_profile():
     try:
         current_user_id = get_jwt_identity()['id']
         user = User.query.get(current_user_id)
-        
+
         if not user:
             return jsonify({'status': 'error', 'message': 'User not found'}), 404
 
         data = request.get_json()
-        
+
         # Update allowed fields
         if 'phone_number' in data:
             user.phone_number = data['phone_number']
-        
+
         db.session.commit()
 
         return jsonify({
@@ -229,19 +243,22 @@ def update_profile():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # Add a Restaurant
+
+
 @app.route('/restaurants', methods=['POST'])
 @jwt_required()
 def add_restaurant():
     try:
         current_user = get_jwt_identity()
         data = request.get_json()
-        
+
         required_fields = ['name', 'address', 'place_id']
         if not all(field in data for field in required_fields):
             return jsonify({'status': 'error', 'message': 'Missing required fields'}), 400
 
         # Check if restaurant already exists
-        existing_restaurant = Restaurant.query.filter_by(place_id=data['place_id']).first()
+        existing_restaurant = Restaurant.query.filter_by(
+            place_id=data['place_id']).first()
         if existing_restaurant:
             return jsonify({'status': 'error', 'message': 'Restaurant already exists'}), 400
 
@@ -276,8 +293,8 @@ def add_restaurant():
         db.session.rollback()
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+
 @app.route('/halal-restaurants', methods=['GET'])
-@jwt_required()
 def get_halal_restaurants():
     try:
         # Parameters for the Google Places API request
@@ -293,10 +310,26 @@ def get_halal_restaurants():
         # Extract relevant information from results
         restaurants = []
         for place in data.get('results', []):
+            # Get detailed place information
+            place_id = place.get('place_id')
+            place_details = {}
+            if place_id:
+                details_params = {
+                    'place_id': place_id,
+                    'key': os.getenv('GOOGLE_API_KEY'),
+                    'fields': 'name,formatted_address,rating,user_ratings_total,photo,price_level,formatted_phone_number,website,opening_hours,reviews'
+                }
+                details_response = requests.get(
+                    GOOGLE_PLACE_DETAILS_URL, params=details_params, timeout=10)
+                place_details = details_response.json().get('result', {})
+
             # Get the first photo reference if available
             photo_reference = None
             if place.get('photos'):
                 photo_reference = place['photos'][0].get('photo_reference')
+            elif place_details.get('photos'):
+                photo_reference = place_details['photos'][0].get(
+                    'photo_reference')
 
             # Construct photo URL if photo reference exists
             photo_url = None
@@ -308,9 +341,12 @@ def get_halal_restaurants():
                 'address': place.get('formatted_address'),
                 'rating': place.get('rating'),
                 'total_ratings': place.get('user_ratings_total'),
-                'place_id': place.get('place_id'),
+                'place_id': place_id,
                 'photo_url': photo_url,
-                'price_level': place.get('price_level')
+                'price_level': place.get('price_level'),
+                'phone_number': place_details.get('formatted_phone_number'),
+                'website': place_details.get('website'),
+                'opening_hours': place_details.get('opening_hours', {}).get('weekday_text'),
             }
             restaurants.append(restaurant)
 
@@ -324,6 +360,7 @@ def get_halal_restaurants():
             'status': 'error',
             'message': str(e)
         }), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
