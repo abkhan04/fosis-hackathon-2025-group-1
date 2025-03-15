@@ -30,7 +30,6 @@ GOOGLE_API_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 GOOGLE_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo"
 GOOGLE_PLACE_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json"
 
-
 # Define User model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -53,17 +52,14 @@ class Restaurant(db.Model):
     website = db.Column(db.String(255))
     halal_certification = db.Column(db.String(255))
 
-
 # Initialize Database
 with app.app_context():
     db.create_all()
-
 
 def validate_email(email):
     """Validate email format"""
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(pattern, email) is not None
-
 
 def validate_password(password):
     """Validate password strength"""
@@ -78,8 +74,6 @@ def validate_password(password):
     return True, "Password is valid"
 
 # User Registration
-
-
 @app.route('/register', methods=['POST'])
 def register():
     try:
@@ -136,8 +130,6 @@ def register():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # User Login
-
-
 @app.route('/login', methods=['POST'])
 def login():
     try:
@@ -171,8 +163,6 @@ def login():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # Get User Profile
-
-
 @app.route('/profile', methods=['GET'])
 @jwt_required()
 def get_profile():
@@ -208,8 +198,6 @@ def get_profile():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # Update User Profile
-
-
 @app.route('/profile', methods=['PUT'])
 @jwt_required()
 def update_profile():
@@ -243,8 +231,6 @@ def update_profile():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # Add a Restaurant
-
-
 @app.route('/restaurants', methods=['POST'])
 @jwt_required()
 def add_restaurant():
