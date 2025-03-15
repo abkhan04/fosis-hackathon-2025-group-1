@@ -65,21 +65,22 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Food Cards */}
-            <div className="absolute bottom-0 right-0 flex flex-col md:flex-row gap-4 z-20 -mb-20">
-              <FoodCard
-                title="Spicy noodles"
-                rating={3}
-                price={18.0}
-                image="/placeholder.svg?height=80&width=80"
-              />
-              <FoodCard
-                title="Vegetarian salad"
-                rating={4}
-                price={23.0}
-                image="/placeholder.svg?height=80&width=80"
-              />
-            </div>
+{/* Food Cards */}
+<div className="absolute bottom-0 right-0 flex flex-col md:flex-row gap-4 z-20 -mb-20">
+  <FoodCard
+    title="Chicken Doner"
+    rating={4} // 4-star rating
+    price={18.0}
+    image="/images/chicken-doner-kebab-1.jpg" // Ensure this file exists in /public/images/
+  />
+  <FoodCard
+    title="Lamb Biryani"
+    rating={3} // 3-star rating
+    price={23.0}
+    image="/images/lamb-biryani-83e5c3d.jpg" // Ensure this file exists in /public/images/
+  />
+</div>
+
           </div>
         </div>
       </div>
