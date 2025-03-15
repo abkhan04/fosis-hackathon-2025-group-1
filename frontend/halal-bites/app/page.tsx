@@ -1,103 +1,98 @@
-import Image from "next/image";
+import Image from "next/image"
+import { Star } from "lucide-react"
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <main className="min-h-screen bg-white overflow-hidden">
+      <div className="container mx-auto px-4 py-6 relative">
+        {/* Logo */}
+        <div className="mb-16">
+          <h1 className="text-[#53ec62] font-bold text-3xl">
+            <span className="bg-[#53ec62] text-white px-2 py-1 rounded-md">Halal</span>Bites
+          </h1>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Hero Section */}
+        <div className="flex flex-col lg:flex-row items-center">
+          <div className="lg:w-1/2 z-10">
+            <h2 className="text-5xl md:text-6xl font-bold leading-tight">
+              Dive into Delights
+              <br />
+              Of Delectable <span className="text-[#53ec62]">Food</span>
+            </h2>
+            <p className="text-[#4a4a4a] mt-6 max-w-lg">
+              Where Each Plate Weaves a Story of Culinary
+              <br />
+              Mastery and Passionate Craftsmanship
+            </p>
+
+            {/* Search Bar */}
+            <div className="mt-10 flex items-center">
+              <div className="relative flex items-center bg-white rounded-full shadow-lg pr-1 w-full max-w-md">
+                <input
+                  type="text"
+                  placeholder="Enter your location"
+                  className="py-4 px-6 w-full rounded-full outline-none"
+                />
+                <button className="bg-[#39db4a] hover:bg-[#53ec62] text-white font-medium py-3 px-8 rounded-full transition-colors">
+                  Search
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Hero Image */}
+          <div className="lg:w-1/2 relative mt-10 lg:mt-0">
+            <div className="relative">
+              {/* Speech Bubble */}
+              <div className="absolute top-0 left-0 z-10 bg-white px-4 py-2 rounded-lg shadow-md">
+                <p className="text-[#ff6868]">Us when we see haram food 🌶️</p>
+              </div>
+
+              {/* Chef Image */}
+              <div className="w-[500px] h-[500px] bg-[#53ec62] rounded-full overflow-hidden relative">
+                <Image
+                  src="/placeholder.svg?height=500&width=500"
+                  alt="Chef rejecting non-halal food"
+                  width={500}
+                  height={500}
+                  className="object-cover"
+                />
+              </div>
+            </div>
+
+            {/* Food Cards */}
+            <div className="absolute bottom-0 right-0 flex flex-col md:flex-row gap-4 z-20 -mb-20">
+              <FoodCard title="Spicy noodles" rating={3} price={18.0} image="/placeholder.svg?height=80&width=80" />
+              <FoodCard title="Vegetarian salad" rating={4} price={23.0} image="/placeholder.svg?height=80&width=80" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  )
+}
+
+interface FoodCardProps {
+  title: string
+  rating: number
+  price: number
+  image: string
+}
+
+function FoodCard({ title, rating, price, image }: FoodCardProps) {
+  return (
+    <div className="bg-white rounded-xl p-4 shadow-lg flex items-center gap-4 w-64">
+      <Image src={image || "/placeholder.svg"} alt={title} width={80} height={80} className="rounded-lg object-cover" />
+      <div>
+        <h3 className="font-medium">{title}</h3>
+        <div className="flex items-center mt-1">
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} className={`w-4 h-4 ${i < rating ? "text-[#ffe605] fill-[#ffe605]" : "text-gray-300"}`} />
+          ))}
+        </div>
+        <p className="text-[#ff6868] font-medium mt-1">${price.toFixed(2)}</p>
+      </div>
     </div>
-  );
+  )
 }
