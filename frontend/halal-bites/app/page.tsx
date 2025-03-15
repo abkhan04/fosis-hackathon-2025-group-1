@@ -1,5 +1,7 @@
-import Image from "next/image"
-import { Star } from "lucide-react"
+import Image from "next/image";
+import { Star } from "lucide-react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function Home() {
   return (
@@ -8,7 +10,10 @@ export default function Home() {
         {/* Logo */}
         <div className="mb-16">
           <h1 className="text-[#53ec62] font-bold text-3xl">
-            <span className="bg-[#53ec62] text-white px-2 py-1 rounded-md">Halal</span>Bites
+            <span className="bg-[#53ec62] text-white px-2 py-1 rounded-md">
+              Halal
+            </span>
+            Bites
           </h1>
         </div>
 
@@ -48,44 +53,57 @@ export default function Home() {
                 <p className="text-[#ff6868]">Us when we see haram food 🌶️</p>
               </div>
 
-            {/* Chef Image inside Green Circle */}
-            <div className="w-[500px] h-[500px] bg-[#53ec62] rounded-full overflow-hidden relative">
-            <Image
-              src="/images/male-chef.png" // Just use "/images/your-image.png"
-              alt="Chef rejecting non-halal food"
-              width={500}
-              height={500}
-              className="object-cover"
-            />
-
-            </div>
-
+              {/* Chef Image inside Green Circle */}
+              <div className="w-[500px] h-[500px] bg-[#53ec62] rounded-full overflow-hidden relative">
+                <Image
+                  src="/images/male-chef.png" // Just use "/images/your-image.png"
+                  alt="Chef rejecting non-halal food"
+                  width={500}
+                  height={500}
+                  className="object-cover"
+                />
+              </div>
             </div>
 
             {/* Food Cards */}
             <div className="absolute bottom-0 right-0 flex flex-col md:flex-row gap-4 z-20 -mb-20">
-            <FoodCard title="Chicken Doner" rating={3} price={18.0} image="/images/chicken-doner-kebab-1.jpg" />
-            <FoodCard title="Lamb Biryani" rating={4} price={23.0} image="/images/lamb-biryani-83e5c3d.jpg" />
-
+              <FoodCard
+                title="Spicy noodles"
+                rating={3}
+                price={18.0}
+                image="/placeholder.svg?height=80&width=80"
+              />
+              <FoodCard
+                title="Vegetarian salad"
+                rating={4}
+                price={23.0}
+                image="/placeholder.svg?height=80&width=80"
+              />
             </div>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }
 
 interface FoodCardProps {
-  title: string
-  rating: number
-  price: number
-  image: string
+  title: string;
+  rating: number;
+  price: number;
+  image: string;
 }
 
 function FoodCard({ title, rating, price, image }: FoodCardProps) {
   return (
     <div className="bg-white rounded-xl p-4 shadow-lg flex items-center gap-4 w-64">
-      <Image src={image || "/placeholder.svg"} alt={title} width={80} height={80} className="rounded-lg object-cover" />
+      <Image
+        src={image || "/placeholder.svg"}
+        alt={title}
+        width={80}
+        height={80}
+        className="rounded-lg object-cover"
+      />
       <div>
         <h3 className="font-medium text-black">{title}</h3>
         <div className="flex items-center mt-1">
