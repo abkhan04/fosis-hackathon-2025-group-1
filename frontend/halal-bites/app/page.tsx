@@ -15,16 +15,15 @@ export default function Home() {
         {/* Hero Section */}
         <div className="flex flex-col lg:flex-row items-center">
           <div className="lg:w-1/2 z-10">
-            <h2 className="text-5xl md:text-6xl font-bold leading-tight text-black">
-              Dive into Delights
-              <br />
-              Of Delectable <span className="text-[#53ec62]">Food</span>
-            </h2>
-            <p className="text-[#4a4a4a] mt-6 max-w-lg">
-              Where Each Plate Weaves a Story of Culinary
-              <br />
-              Mastery and Passionate Craftsmanship
-            </p>
+          <h2 className="text-5xl md:text-6xl font-bold leading-tight text-black">
+  Savor the Finest <span className="text-[#53ec62]">Halal</span> Flavors, Anytime, Anywhere.
+</h2>
+
+
+<p className="text-[#4a4a4a] mt-6 max-w-lg">
+  Your trusted guide to discovering authentic, delicious, and 100% Halal cuisine near you.
+</p>
+
 
             {/* Search Bar */}
             <div className="mt-10 flex items-center">
@@ -91,11 +90,16 @@ function FoodCard({ title, rating, price, image }: FoodCardProps) {
         <h3 className="font-medium text-black">{title}</h3>
         <div className="flex items-center mt-1">
           {[...Array(5)].map((_, i) => (
-            <Star key={i} className={`w-4 h-4 ${i < rating ? "text-[#ffe605] fill-[#ffe605]" : "text-gray-300"}`} />
+            <Star 
+              key={i} 
+              className={`w-4 h-4 ${i < rating ? "text-[#ffe605] fill-[#ffe605]" : "text-gray-300"}`} 
+              fill={i < rating ? "#ffe605" : "none"} // Ensure filled stars when rating is high
+              stroke={i < rating ? "#ffe605" : "currentColor"} // Keep stroke for outlined stars
+            />
           ))}
         </div>
-        <p className="text-[#ff6868] font-medium mt-1">${price.toFixed(2)}</p>
+        <p className="text-[#ff6868] font-medium mt-1">€{price.toFixed(2)}</p>
       </div>
     </div>
-  )
+  );
 }
