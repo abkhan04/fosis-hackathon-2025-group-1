@@ -16,10 +16,13 @@ app = Flask(__name__)
 CORS(app)
 
 # Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///halal_app.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
+    'DATABASE_URL', 'sqlite:///halal_app.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'your-super-secret-key-change-this-in-production')
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(seconds=int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 86400)))
+app.config['JWT_SECRET_KEY'] = os.getenv(
+    'JWT_SECRET_KEY', 'your-super-secret-key-change-this-in-production')
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(
+    seconds=int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 86400)))
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -31,6 +34,8 @@ GOOGLE_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo"
 GOOGLE_PLACE_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json"
 
 # Define User model
+
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -38,6 +43,8 @@ class User(db.Model):
     phone_number = db.Column(db.String(20))
 
 # Define Restaurant model
+
+
 class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -52,14 +59,17 @@ class Restaurant(db.Model):
     website = db.Column(db.String(255))
     halal_certification = db.Column(db.String(255))
 
+
 # Initialize Database
 with app.app_context():
     db.create_all()
+
 
 def validate_email(email):
     """Validate email format"""
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(pattern, email) is not None
+
 
 def validate_password(password):
     """Validate password strength"""
@@ -74,6 +84,8 @@ def validate_password(password):
     return True, "Password is valid"
 
 # User Registration
+
+
 @app.route('/register', methods=['POST'])
 def register():
     try:
@@ -130,6 +142,8 @@ def register():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # User Login
+
+
 @app.route('/login', methods=['POST'])
 def login():
     try:
@@ -163,6 +177,8 @@ def login():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # Get User Profile
+
+
 @app.route('/profile', methods=['GET'])
 @jwt_required()
 def get_profile():
@@ -198,6 +214,8 @@ def get_profile():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # Update User Profile
+
+
 @app.route('/profile', methods=['PUT'])
 @jwt_required()
 def update_profile():
@@ -231,6 +249,8 @@ def update_profile():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # Add a Restaurant
+
+
 @app.route('/restaurants', methods=['POST'])
 @jwt_required()
 def add_restaurant():
@@ -283,15 +303,41 @@ def add_restaurant():
 @app.route('/halal-restaurants', methods=['GET'])
 def get_halal_restaurants():
     try:
-        # Parameters for the Google Places API request
-        params = {
-            'query': 'halal restaurants in Dublin',
-            'key': os.getenv('GOOGLE_API_KEY')
-        }
+        # Get location parameters from request
+        location = request.args.get('location')
+        latitude = request.args.get('latitude')
+        longitude = request.args.get('longitude')
+
+        # Build the search query based on provided parameters
+        if latitude and longitude:
+            query = f'halal restaurants'
+            params = {
+                'query': query,
+                'key': os.getenv('GOOGLE_API_KEY'),
+                'location': f'{latitude},{longitude}',
+                'radius': '5000'  # 5km radius
+            }
+        elif location:
+            query = f'halal restaurants in {location}'
+            params = {
+                'query': query,
+                'key': os.getenv('GOOGLE_API_KEY')
+            }
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': 'Either location or coordinates (latitude/longitude) must be provided'
+            }), 400
 
         # Make request to Google Places API
         response = requests.get(GOOGLE_API_URL, params=params, timeout=10)
         data = response.json()
+
+        if data.get('status') != 'OK':
+            return jsonify({
+                'status': 'error',
+                'message': 'No restaurants found in this location'
+            }), 404
 
         # Extract relevant information from results
         restaurants = []
