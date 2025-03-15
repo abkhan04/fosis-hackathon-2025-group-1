@@ -19,11 +19,11 @@ def get_halal_restaurants():
             'query': 'halal restaurants in Dublin',
             'key': os.getenv('GOOGLE_API_KEY')
         }
-        
+
         # Make request to Google Places API
-        response = requests.get(GOOGLE_API_URL, params=params)
+        response = requests.get(GOOGLE_API_URL, params=params, timeout=10)
         data = response.json()
-        
+
         # Extract relevant information from results
         restaurants = []
         for place in data.get('results', []):
@@ -35,18 +35,18 @@ def get_halal_restaurants():
                 'place_id': place.get('place_id')
             }
             restaurants.append(restaurant)
-            
+
         return jsonify({
             'status': 'success',
             'restaurants': restaurants
         })
-        
+
     except Exception as e:
         return jsonify({
             'status': 'error',
             'message': str(e)
         }), 500
 
+
 if __name__ == '__main__':
     app.run(debug=True)
-
