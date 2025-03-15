@@ -102,7 +102,7 @@ export default function RestaurantsPage() {
         </div>
 
         {/* Results count */}
-        <h2 className="text-2xl font-semibold mb-6">
+        <h2 className="text-2xl font-semibold mb-6 text-black">
           Found {restaurants.length} Halal restaurants
         </h2>
 
@@ -125,8 +125,8 @@ export default function RestaurantsPage() {
               )}
 
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">{restaurant.name}</h3>
-                <p className="text-gray-600 mb-4">{restaurant.address}</p>
+                <h3 className="text-xl font-semibold mb-2 text-black">{restaurant.name}</h3>
+                <p className="text-black mb-4">{restaurant.address}</p>
 
                 {/* Rating */}
                 <div className="flex items-center mb-4">
@@ -142,7 +142,7 @@ export default function RestaurantsPage() {
                       />
                     ))}
                   </div>
-                  <span className="ml-2 text-gray-600">
+                  <span className="ml-2 text-black">
                     ({restaurant.total_ratings} reviews)
                   </span>
                 </div>
@@ -150,8 +150,14 @@ export default function RestaurantsPage() {
                 {/* Price level */}
                 {restaurant.price_level && (
                   <div className="mb-4">
-                    <span className="text-gray-600">
-                      {"€".repeat(restaurant.price_level)}
+                    <span className="text-black">
+                      {"€".repeat(5 - restaurant.price_level)}
+                      <span className="text-gray-400 text-sm ml-1">
+                        ({restaurant.price_level === 4 ? "Inexpensive" : 
+                          restaurant.price_level === 3 ? "Moderate" :
+                          restaurant.price_level === 2 ? "Expensive" :
+                          "Very Expensive"})
+                      </span>
                     </span>
                   </div>
                 )}

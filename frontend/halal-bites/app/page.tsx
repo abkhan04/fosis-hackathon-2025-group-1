@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Star } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Restaurant {
   name: string;
@@ -97,13 +98,27 @@ export default function Home() {
     <main className="min-h-screen bg-white overflow-hidden px-6 md:px-12 py-6">
       <div className="container mx-auto px-4 py-6 relative">
         {/* Logo */}
-        <div className="mb-16">
+        <div className="mb-16 flex justify-between items-center">
           <h1 className="text-[#53ec62] font-bold text-3xl">
             <span className="bg-[#53ec62] text-white px-2 py-1 rounded-md">
               Halal
             </span>
             Bites
           </h1>
+          <div className="flex gap-4">
+            <Link 
+              href="/login" 
+              className="text-[#39db4a] hover:text-[#53ec62] px-4 py-2 border border-[#39db4a] rounded-full hover:bg-[#f8fff9] transition-colors"
+            >
+              Log in
+            </Link>
+            <Link 
+              href="/register" 
+              className="bg-[#39db4a] text-white px-4 py-2 rounded-full hover:bg-[#53ec62] transition-colors"
+            >
+              Sign up
+            </Link>
+          </div>
         </div>
 
         {/* Hero Section */}
