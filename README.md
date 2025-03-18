@@ -49,10 +49,7 @@ NEXT_PUBLIC_GOOGLE_MAPS_KEY=your_google_maps_api_key
 Create a `.env` file in the backend directory (`backend/.env`) with the following variables:
 
 ```env
-DATABASE_URL=your_database_url
-GOOGLE_MAPS_API_KEY=your_google_maps_api_key
-JWT_SECRET_KEY=your_jwt_secret_key
-CORS_ORIGIN=http://localhost:3000
+GOOGLE_API_KEY=your_google_maps_api_key
 ```
 
 To get your Google Maps API key:
